@@ -18,7 +18,8 @@ class Signin extends Component {
   };
 
   onSubmitSignIn = () => {
-    fetch("https://smart-brain-api-bk.herokuapp.com/signin", {
+    // fetch("https://smart-brain-api-bk.herokuapp.com/signin", {
+    fetch("http://localhost:8000/signin", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

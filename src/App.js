@@ -119,60 +119,36 @@ class App extends Component {
   onButtonSubmit = () => {
     this.setState({ imageURL: this.state.input });
 
-    const raw = JSON.stringify({
-      user_app_id: {
-        user_id: "q3i17d8o2quk",
-        app_id: "f66197064d314968a666379c7537b797",
-      },
-      inputs: [
-        {
-          data: {
-            image: {
-              url: this.state.input,
-            },
-          },
-        },
-      ],
-    });
-
-    const requestOptions = {
-      method: "POST",
+    fetch("http://localhost:8000/image", {
+      method: "post",
       headers: {
-        Accept: "application/json",
-        Authorization: "Key 3245d277e2a747fb89bd36a11b51d38b",
+        "Content-Type": "application/json",
       },
-      body: raw,
-    };
-
-    // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
-    // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
-    // this will default to the latest version_id
-
-    fetch(
-      "https://api.clarifai.com/v2/models/face-detection/outputs",
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.status.code === 10000) {
-          fetch("https://smart-brain-api-bk.herokuapp.com/image", {
-            method: "put",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: this.state.user.id,
-            }),
-          })
-            .then((response) => response.json())
-            .then((result) => {
-              this.setState(
-                Object.assign(this.state.user, { entries: result })
-              );
-            })
-            .catch(console.log);
-          this.displayFaceBox(this.calculateFaceLocation(result));
+      body: JSON.stringify({ imageURL: this.state.input }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          throw new Error();
         }
+        return response.json();
       })
-      .catch((error) => console.log("error", error));
+      .then((data) => {
+        fetch("http://localhost:8000/image", {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: this.state.user.id }),
+        })
+          .then((res) => res.json())
+          .then((entries) => {
+            this.setState(Object.assign(this.state.user, { entries }));
+          })
+          .catch(console.log);
+
+        this.displayFaceBox(this.calculateFaceLocation(data));
+      })
+      .catch(console.log);
   };
 
   /* particlesInit = (main) => {
