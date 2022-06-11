@@ -21,7 +21,7 @@ class Register extends Component {
   };
 
   onSubmitRegister = () => {
-    fetch("https://smart-brain-api-bk.herokuapp.com/register", {
+    fetch("https://face-detection-api-bk.herokuapp.com/register", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

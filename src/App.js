@@ -119,7 +119,7 @@ class App extends Component {
   onButtonSubmit = () => {
     this.setState({ imageURL: this.state.input });
 
-    fetch("https://smart-brain-api-bk.herokuapp.com/image", {
+    fetch("https://face-detection-api-bk.herokuapp.com/image", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -133,7 +133,7 @@ class App extends Component {
         return response.json();
       })
       .then((data) => {
-        fetch("https://smart-brain-api-bk.herokuapp.com/image", {
+        fetch("https://face-detection-api-bk.herokuapp.com/image", {
           method: "put",
           headers: {
             "Content-Type": "application/json",
