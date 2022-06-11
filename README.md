@@ -1,4 +1,4 @@
-## Smart Brain
+## Face Detection
 
 Face detection app front end  <br />
 Uses clarifai api Face model  <br />
